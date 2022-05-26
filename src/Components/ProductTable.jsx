@@ -37,7 +37,11 @@ export default function ProductTable({ cart, updateCart }) {
 
   useEffect(async () => {
     console.info("Fetching Products...");
-    let res = await fetch("https://3001-twbluenaxel-reactecomme-nw51bxnrsln.ws-us45.gitpod.io/products", {
+    // let test = require('dotenv').config();
+    // console.log(test)
+    // let productsDBUrl = process.env.GITPOD_WORKSPACE_URL.replace('https://', '3001-')
+    // console.log(productsDBUrl)
+    let res = await fetch("https://3001-twbluenaxel-reactecomme-nw51bxnrsln.ws-us46.gitpod.io/products", {
       'credentials': "include"});
     let body = await res.json();
     setProducts(body);
