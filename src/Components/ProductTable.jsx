@@ -27,6 +27,8 @@ const getDefaultSortOptions = () => {
   ];
 };
 
+let originalProductTableOrder = [];
+
 export default function ProductTable({ cart, updateCartAndLocalStorage }) {
   let [products, setProducts] = useState([]);
 
@@ -44,9 +46,28 @@ export default function ProductTable({ cart, updateCartAndLocalStorage }) {
     let res = await fetch("https://3001-twbluenaxel-reactecomme-nw51bxnrsln.ws-us46.gitpod.io/products", {
       'credentials': "include"});
     let body = await res.json();
+    originalProductTableOrder = body;
     setProducts(body);
     // return setProducts(body)
   }, []);
+
+  useEffect(() => {
+    let currentSelectedOption = sortOptions.filter((option) => option.current)
+    let newProductTableOrder = [...products]
+
+    if(currentSelectedOption.length === 0) return setProducts(originalProductTableOrder)
+
+    newProductTableOrder.sort((product1, product2) => {
+      if (currentSelectedOption[0].name === 'Price'){
+        return product2.price - product1.price
+      }else{
+        return product2.releaseDate - product1.releaseDate
+      }
+    })
+
+    setProducts(newProductTableOrder)
+  }, [sortOptions])
+
 
   return (
     <div className="bg-white">
