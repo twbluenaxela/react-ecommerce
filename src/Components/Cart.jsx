@@ -12,7 +12,7 @@ function getSubtotalOfCartItems(cart){
   return subtotal
 }
 
-export default function Cart({ open, setOpen, cart, updateCart }) {
+export default function Cart({ open, setOpen, cart, updateCartAndLocalStorage }) {
 
   let subtotalOfCart = getSubtotalOfCartItems(cart)
 
@@ -111,7 +111,7 @@ export default function Cart({ open, setOpen, cart, updateCart }) {
 
                                           return p.quantity > 0;
                                         });
-                                        updateCart(newCart);
+                                        updateCartAndLocalStorage(newCart);
                                       }}
                                       type="button"
                                       className="font-medium text-gray-500 hover:text-black"
