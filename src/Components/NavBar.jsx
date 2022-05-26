@@ -3,8 +3,7 @@ import React from "react";
 
 function countItemsInCart(cart){
   let count = 0
-  count = cart.length
-
+  cart.map((item) => (count += item.quantity))
   return count
 
 }

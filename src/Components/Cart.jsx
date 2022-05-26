@@ -3,7 +3,19 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingCartIcon, XIcon } from "@heroicons/react/outline";
 import React, { Fragment } from "react";
 
+function getSubtotalOfCartItems(cart){
+  let subtotal = 0
+  subtotal = cart.reduce(
+    (total, product) => (product.quantity * product.price) + total, 0
+    )
+  
+  return subtotal
+}
+
 export default function Cart({ open, setOpen, cart, updateCart }) {
+
+  let subtotalOfCart = getSubtotalOfCartItems(cart)
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -119,7 +131,7 @@ export default function Cart({ open, setOpen, cart, updateCart }) {
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>$262.00</p>
+                      <p>{"$" + subtotalOfCart}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">
