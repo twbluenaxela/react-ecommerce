@@ -53,7 +53,8 @@ export default function ProductTable({ cart, updateCartAndLocalStorage }) {
 
   useEffect(() => {
     let currentSelectedOption = sortOptions.filter((option) => option.current)
-    let newProductTableOrder = [...products]
+    let newProductTableOrder = [...originalProductTableOrder]
+    
 
     if(currentSelectedOption.length === 0) return setProducts(originalProductTableOrder)
 
@@ -68,12 +69,45 @@ export default function ProductTable({ cart, updateCartAndLocalStorage }) {
     setProducts(newProductTableOrder)
   }, [sortOptions])
 
+  useEffect(()=> {
+    let newProductTable = [ ...originalProductTableOrder]
+
+    let priceFilters = filterOptions.price.filter((option) => {
+      return option.checked
+    })
+    let colorFilters = filterOptions.color.filter((option) => {
+      return option.checked
+    })
+
+    if (priceFilters.length != 0) {
+      newProductTable = newProductTable.filter((product) => {
+        let resultArray = priceFilters.map(
+          (filter) => filter.minValue < product.price && filter.maxValue > product.price
+        );
+        return resultArray.reduce((x, y) => x || y, false);
+      });
+    }
+
+    if (colorFilters.length != 0) {
+      newProductTable = newProductTable.filter((product) => {
+        let selectedColorFilter = true;
+        colorFilters.map(
+          (filter) => (selectedColorFilter = filter.value == product.color)
+        );
+        return selectedColorFilter
+      });
+    }
+
+
+    setProducts(newProductTable)
+    
+  },[filterOptions])
 
   return (
     <div className="bg-white">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>
-        <ProductFilters {...{ filterOptions, setFilterOptions, sortOptions, setSortOptions }} />
+        <ProductFilters {...{ filterOptions, setFilterOptions, sortOptions, setSortOptions, getDefaultFilterOptions }} />
 
         <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {products.map((product) => (
